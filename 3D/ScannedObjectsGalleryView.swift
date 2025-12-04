@@ -729,7 +729,8 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 
 extension UTType {
     static var usdz: UTType {
-        UTType(filenameExtension: "usdz")!
+        // Fallback to .data if usdz type can't be created (should never fail)
+        UTType(filenameExtension: "usdz") ?? UTType.data
     }
 }
 

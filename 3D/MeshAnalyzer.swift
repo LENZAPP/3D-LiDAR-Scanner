@@ -200,16 +200,15 @@ class MeshAnalyzer: ObservableObject {
             print("✅ Mesh is watertight, no repair needed")
         }
 
-        // Calculate bounding box
+        // Calculate bounding box (off main thread)
         let bbox = calculateBoundingBox(meshToAnalyze)
-        self.boundingBox = bbox
 
         // Calculate dimensions (convert to cm and apply calibration)
         let width = Double(bbox.size.x * calibrationScale * 100)
         let height = Double(bbox.size.y * calibrationScale * 100)
         let depth = Double(bbox.size.z * calibrationScale * 100)
 
-        self.dimensions = Dimensions(
+        let dims = Dimensions(
             width: width,
             height: height,
             depth: depth
@@ -217,7 +216,6 @@ class MeshAnalyzer: ObservableObject {
 
         // Calculate volume using PRECISE signed volume method (not just bounding box!)
         let volumeCm3 = calculatePreciseVolume(meshToAnalyze)
-        self.volume = volumeCm3
 
         print("📐 Volume Calculation:")
         print("   - Bounding Box Volume: \(width * height * depth) cm³ (simplified)")
@@ -226,6 +224,11 @@ class MeshAnalyzer: ObservableObject {
 
         // Analyze mesh quality
         self.meshQuality = await analyzeMeshQuality(meshToAnalyze)
+
+        // Update published properties
+        self.boundingBox = bbox
+        self.dimensions = dims
+        self.volume = volumeCm3
 
         print("""
         📊 Mesh Analysis Complete:

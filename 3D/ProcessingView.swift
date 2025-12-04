@@ -11,6 +11,7 @@ struct ProcessingView: View {
     @State private var currentStage = 0
     @State private var progress: Double = 0
     @State private var animateGlow = false
+    @State private var progressTimer: Timer?
 
     let stages = [
         (icon: "photo.stack", title: "Bilder analysieren", duration: 2.0),
@@ -130,11 +131,19 @@ struct ProcessingView: View {
             animateGlow = true
             simulateProgress()
         }
+        .onDisappear {
+            // Clean up timer when view disappears
+            progressTimer?.invalidate()
+            progressTimer = nil
+        }
     }
 
     private func simulateProgress() {
+        // Clean up existing timer
+        progressTimer?.invalidate()
+
         // This is visual only - actual progress comes from PhotogrammetrySession
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+        progressTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
             withAnimation(.linear(duration: 0.1)) {
                 progress += 0.005
 
@@ -144,6 +153,7 @@ struct ProcessingView: View {
                         currentStage += 1
                     } else {
                         timer.invalidate()
+                        progressTimer = nil
                     }
                 }
             }
