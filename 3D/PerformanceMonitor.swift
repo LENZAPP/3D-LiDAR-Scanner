@@ -99,6 +99,7 @@ class PerformanceMonitor: ObservableObject {
 
     private var lastFrameTime: CFTimeInterval = 0
     private var frameCount = 0
+    private var metricsTimer: Timer?
 
     private let logger = OSLog(subsystem: "com.lenz.3D", category: "Performance")
 
@@ -114,7 +115,7 @@ class PerformanceMonitor: ObservableObject {
         )
 
         // Start metrics collection timer
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        metricsTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateMetrics()
         }
 
@@ -122,6 +123,8 @@ class PerformanceMonitor: ObservableObject {
     }
 
     func stopMonitoring() {
+        metricsTimer?.invalidate()
+        metricsTimer = nil
         NotificationCenter.default.removeObserver(self)
         os_log("🛑 Performance monitoring stopped", log: logger, type: .info)
     }

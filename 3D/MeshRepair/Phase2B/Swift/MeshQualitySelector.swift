@@ -128,7 +128,11 @@ class MeshQualitySelector {
 
         let vertexCount = mesh.vertexCount
         let vertexDescriptor = mesh.vertexDescriptor
-        let positionAttribute = vertexDescriptor.attributes[0] as! MDLVertexAttribute
+
+        // Safe cast: Verify attribute is MDLVertexAttribute
+        guard let positionAttribute = vertexDescriptor.attributes[0] as? MDLVertexAttribute else {
+            return []
+        }
 
         let stride = positionAttribute.bufferIndex == 0 ?
             mesh.vertexBuffers[0].length / vertexCount : 12

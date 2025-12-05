@@ -342,7 +342,8 @@ class CalibrationManager: NSObject, ObservableObject {
         // STABILIZATION: Smooth quality score over time to prevent flickering
         qualityHistory.append(rawQuality.overallScore)
         if qualityHistory.count > qualityHistorySize {
-            qualityHistory.removeFirst()
+            // Performance: Use dropFirst() instead of removeFirst() to avoid O(n) shift
+            qualityHistory = Array(qualityHistory.dropFirst())
         }
 
         // Use smoothed quality score (average of last N frames)

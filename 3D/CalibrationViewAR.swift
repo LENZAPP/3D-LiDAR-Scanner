@@ -22,11 +22,11 @@ struct CalibrationViewAR: View {
         ZStack {
             // AR Camera Feed
             ARViewContainerForCalibration(manager: manager, isCalibrating: $isCalibrating)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
 
             // Light overlay for better visibility
             Color.black.opacity(0.2)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
 
             // OPTIMIZED: Always show calibration UI, no onboarding screen
             VStack {
@@ -297,7 +297,7 @@ struct OnboardingOverlayAR: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.9)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
 
             VStack(spacing: 30) {
                 Image(systemName: "creditcard.fill")
@@ -721,7 +721,7 @@ struct SuccessOverlayAR: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.9)
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
 
             VStack(spacing: 30) {
                 Image(systemName: "checkmark.circle.fill")

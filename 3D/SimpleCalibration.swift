@@ -327,7 +327,7 @@ struct SimpleCalibrationView: View {
             RealityKitARViewContainer(arManager: arManager, onTap: { point, size in
                 handleTapOrDrag(at: point, size: size)
             })
-            .edgesIgnoringSafeArea(.all)
+            .ignoresSafeArea(.all)
 
             // Pin Markers Overlay
             GeometryReader { geometry in
@@ -346,7 +346,7 @@ struct SimpleCalibrationView: View {
                     viewportSize = geometry.size
                 }
             }
-            .edgesIgnoringSafeArea(.all)
+            .ignoresSafeArea(.all)
 
             VStack {
                 // Top instruction

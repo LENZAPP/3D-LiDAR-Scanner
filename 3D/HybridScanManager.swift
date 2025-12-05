@@ -175,6 +175,10 @@ class HybridScanManager: NSObject, ObservableObject {
                 }
             }
         }
+
+        // Clean up session
+        objectCaptureSession?.cancel()
+        objectCaptureSession = nil
     }
 
     // MARK: - Phase 3: AI Enhancement
@@ -342,16 +346,8 @@ class HybridScanManager: NSObject, ObservableObject {
     }
 
     private func mergePointClouds(original: [SIMD3<Float>], completed: [SIMD3<Float>]) -> [SIMD3<Float>] {
-        var merged = Set<SIMD3<Float>>()
-
-        for point in original {
-            merged.insert(point)
-        }
-
-        for point in completed {
-            merged.insert(point)
-        }
-
+        // Performance: Use Set.union() instead of manual insertion - O(n+m) instead of O(n+m) with better constants
+        let merged = Set(original).union(completed)
         return Array(merged)
     }
 

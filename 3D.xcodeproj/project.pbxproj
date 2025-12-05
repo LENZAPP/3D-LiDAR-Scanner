@@ -15,12 +15,15 @@
 		33889FD318560558D4513931 /* ScannedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338885E0FDBFBAF48479BB9E /* ScannedObject.swift */; };
 		33E986922ED139130051DF7B /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E986912ED139130051DF7B /* MeasurementView.swift */; };
 		3B1C31C816F75F1DAF972C3E /* MeshAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D86202AD90E7F8A66969470 /* MeshAnalyzer.swift */; };
+		3D0411A51D4B06EAA4065724 /* PointCloudCompletion.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = ADA0FB93CDD7994EB795AEA6 /* PointCloudCompletion.mlpackage */; };
 		4402EC0F3C20C6DBE7F2224E /* PoissonWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F37AD7C51206F40F4F056B41 /* PoissonWrapper.cpp */; };
 		4711FF497563305FC6BFC94C /* PoissonMeshRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5497C9C16CB5F2C7FAC64FEF /* PoissonMeshRepair.swift */; };
 		4A1C31C816F75F1DAF972C3F /* MeshSimplifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D86202AD90E7F8A66969471 /* MeshSimplifier.swift */; };
 		4A1C31C816F75F1DAF972C40 /* QuadricErrorMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D86202AD90E7F8A66969472 /* QuadricErrorMetrics.swift */; };
 		4A1C31C816F75F1DAF972C41 /* VertexClusterSimplifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D86202AD90E7F8A66969473 /* VertexClusterSimplifier.swift */; };
 		600E015903DB930717F3A140 /* MeshSimplificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1CF9476251D86D98F7137B /* MeshSimplificationView.swift */; };
+		650FE2C51F6ED236B5C37CF4 /* ScanDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756EC76F82EA9788866182F7 /* ScanDatabaseManager.swift */; };
+		7366D8D3ECC645C224498A04 /* ScanResultLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602E48B90DFC43327E011B3B /* ScanResultLogger.swift */; };
 		81322D383068CB1DE6CC3A41 /* MeshFixBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 271A1D81DFB3F36B479F6050 /* MeshFixBridge.mm */; };
 		9732658FA9E1654A5332C017 /* NormalEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A7A18EFABA4FC2786B092F /* NormalEstimator.swift */; };
 		9DB5077C6414EF40C084D39E /* MeshFixWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2AC165EFFE0354AF85D79BB /* MeshFixWrapper.cpp */; };
@@ -35,6 +38,7 @@
 		A100000000000009 /* ScanOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000A /* ScanOverlayView.swift */; };
 		A10000000000000A /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000B /* ProcessingView.swift */; };
 		A10000000000000B /* ModelPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000C /* ModelPreviewView.swift */; };
+		C4838815F4535A68FE4BFA85 /* database_schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 7DA6F18752AED0123A3667EB /* database_schema.sql */; };
 		C56A4223A2F41EBCC2556ACB /* PoissonBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = EEF9B399E6634052E86FD011 /* PoissonBridge.mm */; };
 		C8296EC002EAE6F80C65647F /* MetalMeshSimplifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A075EED4482AF7937AA55D /* MetalMeshSimplifier.swift */; };
 		CAL2000000000001 /* CalibrationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAL1000000000001 /* CalibrationModels.swift */; };
@@ -49,6 +53,7 @@
 		CAL2000000000011 /* CalibrationQuickAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAL1000000000011 /* CalibrationQuickAccess.swift */; };
 		CAL2000000000012 /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAL1000000000012 /* CalibrationView.swift */; };
 		E1094C3CEA54E3AACD73052B /* MeshSimplification.metal in Sources */ = {isa = PBXBuildFile; fileRef = 48D4A380B7E1C7DB28A132D4 /* MeshSimplification.metal */; };
+		E63F603315F47E26F009C773 /* ScanResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8D4428567836D692976AF1 /* ScanResultsView.swift */; };
 		EEE89053B012617275411AC0 /* MeshRepairError.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD726A8419DB647F2E63B53 /* MeshRepairError.swift */; };
 		F783C4865CF4A7AF6D8D3D22 /* CoreMLMeshProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F06F25283E417D40D7EAE1 /* CoreMLMeshProcessor.swift */; };
 		F9695963C3D9E1C5D1FD42CF /* TaubinSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = E647A72C80AFF297CF1520F4 /* TaubinSmoother.swift */; };
@@ -60,9 +65,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02D4153321B3B79762F26F08 /* PoissonWrapper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = PoissonWrapper.cpp; path = MeshRepair/Phase2B/CPP/PoissonWrapper.cpp; sourceTree = "<group>"; };
 		063E2261BDE8173932DC231C /* PoissonWrapper.hpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.h; name = PoissonWrapper.hpp; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/CPP/PoissonWrapper.hpp; sourceTree = "<absolute>"; };
-		182FA60E7A8F5C146B91C80D /* MeshFixBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = MeshFixBridge.mm; path = MeshRepair/Phase2B/ObjCBridge/MeshFixBridge.mm; sourceTree = "<group>"; };
 		1AAD4461DA5F40707E710EA2 /* MeshFixBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MeshFixBridge.h; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/ObjCBridge/MeshFixBridge.h; sourceTree = "<absolute>"; };
 		1EAF6F13CDCD2007BB7A510D /* MeshRepairResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MeshRepairResult.swift; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Shared/MeshRepairResult.swift; sourceTree = "<absolute>"; };
 		271A1D81DFB3F36B479F6050 /* MeshFixBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = MeshFixBridge.mm; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/ObjCBridge/MeshFixBridge.mm; sourceTree = "<absolute>"; };
@@ -74,11 +77,12 @@
 		3388886A2FD6918374E9C8D5 /* SimpleCalibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCalibration.swift; sourceTree = "<group>"; };
 		338889DFD6925C71B4664BBE /* ScannedObjectsGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannedObjectsGalleryView.swift; sourceTree = "<group>"; };
 		33E986912ED139130051DF7B /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
-		34CAF3D49299A3A4BDE09822 /* PoissonMeshRepair.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PoissonMeshRepair.swift; path = MeshRepair/Phase2B/Swift/PoissonMeshRepair.swift; sourceTree = "<group>"; };
 		48D4A380B7E1C7DB28A132D4 /* MeshSimplification.metal */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.metal; path = MeshSimplification.metal; sourceTree = "<group>"; };
 		5497C9C16CB5F2C7FAC64FEF /* PoissonMeshRepair.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PoissonMeshRepair.swift; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/Swift/PoissonMeshRepair.swift; sourceTree = "<absolute>"; };
+		602E48B90DFC43327E011B3B /* ScanResultLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScanResultLogger.swift; path = 3D/Database/ScanResultLogger.swift; sourceTree = "<group>"; };
+		756EC76F82EA9788866182F7 /* ScanDatabaseManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScanDatabaseManager.swift; path = 3D/Database/ScanDatabaseManager.swift; sourceTree = "<group>"; };
 		77A7A18EFABA4FC2786B092F /* NormalEstimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NormalEstimator.swift; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/Swift/NormalEstimator.swift; sourceTree = "<absolute>"; };
-		82EF44A68A4591D57C320C7C /* MeshFixWrapper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = MeshFixWrapper.cpp; path = MeshRepair/Phase2B/CPP/MeshFixWrapper.cpp; sourceTree = "<group>"; };
+		7DA6F18752AED0123A3667EB /* database_schema.sql */ = {isa = PBXFileReference; includeInIndex = 1; path = database_schema.sql; sourceTree = "<group>"; };
 		86A075EED4482AF7937AA55D /* MetalMeshSimplifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MetalMeshSimplifier.swift; sourceTree = "<group>"; };
 		8D86202AD90E7F8A66969470 /* MeshAnalyzer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MeshAnalyzer.swift; sourceTree = "<group>"; };
 		9D86202AD90E7F8A66969471 /* MeshSimplifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MeshSimplifier.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 		A20000000000000C /* ModelPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreviewView.swift; sourceTree = "<group>"; };
 		A2AC165EFFE0354AF85D79BB /* MeshFixWrapper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = MeshFixWrapper.cpp; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/CPP/MeshFixWrapper.cpp; sourceTree = "<absolute>"; };
 		A300000000000001 /* 3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD8D4428567836D692976AF1 /* ScanResultsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScanResultsView.swift; path = 3D/Database/ScanResultsView.swift; sourceTree = "<group>"; };
+		ADA0FB93CDD7994EB795AEA6 /* PointCloudCompletion.mlpackage */ = {isa = PBXFileReference; includeInIndex = 1; path = PointCloudCompletion.mlpackage; sourceTree = "<group>"; };
 		B55FBC2025BA5E3AD9A527E3 /* MeshTypes.hpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.h; name = MeshTypes.hpp; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/CPP/MeshTypes.hpp; sourceTree = "<absolute>"; };
 		BBF007EC88FBB344A9144D28 /* MeshFixWrapper.hpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.h; name = MeshFixWrapper.hpp; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/CPP/MeshFixWrapper.hpp; sourceTree = "<absolute>"; };
 		BC0F3B21178458C07977A038 /* PoissonBridge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PoissonBridge.h; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/ObjCBridge/PoissonBridge.h; sourceTree = "<absolute>"; };
@@ -113,15 +119,12 @@
 		CAL1000000000011 /* CalibrationQuickAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationQuickAccess.swift; sourceTree = "<group>"; };
 		CAL1000000000012 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		COV1000000000001 /* CoverageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverageTracker.swift; sourceTree = "<group>"; };
-		D2FF11AF57E072F3E45C0BAD /* TaubinSmoother.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaubinSmoother.swift; path = MeshRepair/Phase2B/Swift/TaubinSmoother.swift; sourceTree = "<group>"; };
 		E647A72C80AFF297CF1520F4 /* TaubinSmoother.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaubinSmoother.swift; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/Swift/TaubinSmoother.swift; sourceTree = "<absolute>"; };
 		ECD726A8419DB647F2E63B53 /* MeshRepairError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MeshRepairError.swift; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Shared/MeshRepairError.swift; sourceTree = "<absolute>"; };
 		ED1CF9476251D86D98F7137B /* MeshSimplificationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MeshSimplificationView.swift; sourceTree = "<group>"; };
 		EEF9B399E6634052E86FD011 /* PoissonBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = PoissonBridge.mm; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/ObjCBridge/PoissonBridge.mm; sourceTree = "<absolute>"; };
 		F37AD7C51206F40F4F056B41 /* PoissonWrapper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = PoissonWrapper.cpp; path = /Users/lenz/Desktop/3D_PROJEKT/3D/3D/MeshRepair/Phase2B/CPP/PoissonWrapper.cpp; sourceTree = "<absolute>"; };
 		F6F06F25283E417D40D7EAE1 /* CoreMLMeshProcessor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CoreMLMeshProcessor.swift; sourceTree = "<group>"; };
-		FE2A530F098F95087FDE827D /* PoissonBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = PoissonBridge.mm; path = MeshRepair/Phase2B/ObjCBridge/PoissonBridge.mm; sourceTree = "<group>"; };
-		FF2459BC9B13753A862B579A /* NormalEstimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NormalEstimator.swift; path = MeshRepair/Phase2B/Swift/NormalEstimator.swift; sourceTree = "<group>"; };
 		GUI1000000000001 /* ScanGuidance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanGuidance.swift; sourceTree = "<group>"; };
 		HYB1000000000001 /* HybridScanManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridScanManager.swift; sourceTree = "<group>"; };
 		HYB1000000000002 /* HybridScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridScanView.swift; sourceTree = "<group>"; };
@@ -193,6 +196,7 @@
 			children = (
 				A500000000000002 /* 3D */,
 				A500000000000003 /* Products */,
+				ADA0FB93CDD7994EB795AEA6 /* PointCloudCompletion.mlpackage */,
 			);
 			sourceTree = "<group>";
 		};
@@ -249,6 +253,7 @@
 				WTC1000000000001 /* WatertightChecker.swift */,
 				VXR1000000000001 /* VoxelMeshRepair.swift */,
 				25FAF3304A2C76541C97CB1D /* MeshRepair */,
+				F9BE6EE33637699B4CE765F6 /* Database */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -272,6 +277,17 @@
 			);
 			name = ObjCBridge;
 			sourceTree = "<group>";
+		};
+		F9BE6EE33637699B4CE765F6 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				756EC76F82EA9788866182F7 /* ScanDatabaseManager.swift */,
+				AD8D4428567836D692976AF1 /* ScanResultsView.swift */,
+				602E48B90DFC43327E011B3B /* ScanResultLogger.swift */,
+				7DA6F18752AED0123A3667EB /* database_schema.sql */,
+			);
+			name = Database;
+			sourceTree = SOURCE_ROOT;
 		};
 		FF80FD58D75AED5814065565 /* Phase2B */ = {
 			isa = PBXGroup;
@@ -342,6 +358,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A100000000000006 /* Assets.xcassets in Resources */,
+				3D0411A51D4B06EAA4065724 /* PointCloudCompletion.mlpackage in Resources */,
+				C4838815F4535A68FE4BFA85 /* database_schema.sql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +419,9 @@
 				9732658FA9E1654A5332C017 /* NormalEstimator.swift in Sources */,
 				F9695963C3D9E1C5D1FD42CF /* TaubinSmoother.swift in Sources */,
 				4711FF497563305FC6BFC94C /* PoissonMeshRepair.swift in Sources */,
+				650FE2C51F6ED236B5C37CF4 /* ScanDatabaseManager.swift in Sources */,
+				E63F603315F47E26F009C773 /* ScanResultsView.swift in Sources */,
+				7366D8D3ECC645C224498A04 /* ScanResultLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

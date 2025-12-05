@@ -134,8 +134,14 @@ class CompleteScanPipeline: NSObject, ObservableObject {
 
         // Step 5: Volumen messen mit korrekter Skalierung
         currentStep = .volumeCalculation
+
+        // Defensive: Verify mesh URLs were set
+        guard let meshURL = objectMeshURL else {
+            throw PipelineError.invalidMesh
+        }
+
         let measurements = try await measureVolume(
-            meshURL: objectMeshURL!,
+            meshURL: meshURL,
             scale: scaleInfo.scaleFactor,
             mask: objectMask
         )
@@ -148,7 +154,7 @@ class CompleteScanPipeline: NSObject, ObservableObject {
         )
 
         let result = ScanResult(
-            objectMesh: objectMeshURL!,
+            objectMesh: meshURL,
             calibrationMesh: calibrationMeshURL,
             objectMask: objectMask,
             cardDetection: cardDetection,
@@ -173,10 +179,12 @@ class CompleteScanPipeline: NSObject, ObservableObject {
         let baseDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("ObjectScan_\(UUID().uuidString)")
 
-        objectImagesDir = baseDir.appendingPathComponent("Images")
+        let imagesDir = baseDir.appendingPathComponent("Images")
         let modelsDir = baseDir.appendingPathComponent("Models")
 
-        try FileManager.default.createDirectory(at: objectImagesDir!, withIntermediateDirectories: true)
+        objectImagesDir = imagesDir  // Store for later use
+
+        try FileManager.default.createDirectory(at: imagesDir, withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: modelsDir, withIntermediateDirectories: true)
 
         // Start ARKit session for LiDAR
@@ -184,17 +192,19 @@ class CompleteScanPipeline: NSObject, ObservableObject {
 
         // Start Object Capture
         objectCaptureSession = ObjectCaptureSession()
-        objectCaptureSession?.start(imagesDirectory: objectImagesDir!)
+        objectCaptureSession?.start(imagesDirectory: imagesDir)
 
         // Wait for user to complete scan
         // (In real app: monitor userCompletedScanPass or photo count)
         try await waitForObjectScan()
 
         // Process with PhotogrammetrySession
-        objectMeshURL = modelsDir.appendingPathComponent("object.usdz")
+        let meshURL = modelsDir.appendingPathComponent("object.usdz")
+        objectMeshURL = meshURL  // Store for later use
+
         try await runPhotogrammetry(
-            input: objectImagesDir!,
-            output: objectMeshURL!
+            input: imagesDir,
+            output: meshURL
         )
 
         // Extract LiDAR scale if available
@@ -241,24 +251,28 @@ class CompleteScanPipeline: NSObject, ObservableObject {
         let baseDir = FileManager.default.temporaryDirectory
             .appendingPathComponent("CardScan_\(UUID().uuidString)")
 
-        calibrationImagesDir = baseDir.appendingPathComponent("Images")
+        let imagesDir = baseDir.appendingPathComponent("Images")
         let modelsDir = baseDir.appendingPathComponent("Models")
 
-        try FileManager.default.createDirectory(at: calibrationImagesDir!, withIntermediateDirectories: true)
+        calibrationImagesDir = imagesDir  // Store for later use
+
+        try FileManager.default.createDirectory(at: imagesDir, withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: modelsDir, withIntermediateDirectories: true)
 
         // Start Object Capture for card
         calibrationCaptureSession = ObjectCaptureSession()
-        calibrationCaptureSession?.start(imagesDirectory: calibrationImagesDir!)
+        calibrationCaptureSession?.start(imagesDirectory: imagesDir)
 
         // Wait for card scan (fewer photos needed)
         try await waitForCalibrationScan()
 
         // Process card mesh
-        calibrationMeshURL = modelsDir.appendingPathComponent("card.usdz")
+        let meshURL = modelsDir.appendingPathComponent("card.usdz")
+        calibrationMeshURL = meshURL  // Store for later use
+
         try await runPhotogrammetry(
-            input: calibrationImagesDir!,
-            output: calibrationMeshURL!,
+            input: imagesDir,
+            output: meshURL,
             detail: .reduced // Card doesn't need high detail
         )
 

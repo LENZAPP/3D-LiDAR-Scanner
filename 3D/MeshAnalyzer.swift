@@ -251,20 +251,25 @@ class MeshAnalyzer: ObservableObject {
         for submesh in mesh.submeshes ?? [] {
             guard submesh is MDLSubmesh else { continue }
 
-            // Get vertex buffer
+            // Get vertex buffer with safe access
             guard let vertexBuffer = mesh.vertexBuffers.first else { continue }
             let vertexData = vertexBuffer.map().bytes
+            let bufferSize = vertexBuffer.length
 
             let vertexCount = mesh.vertexCount
             guard let layout = mesh.vertexDescriptor.layouts.object(at: 0) as? MDLVertexBufferLayout else { continue }
             let stride = layout.stride
 
             for i in 0..<vertexCount {
-                let offset = i * stride
-                let vertex = vertexData.advanced(by: offset).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-
-                minPoint = min(minPoint, vertex)
-                maxPoint = max(maxPoint, vertex)
+                // Safe memory access with bounds checking
+                do {
+                    let vertex = try safeLoadVertex(from: vertexData, index: i, stride: stride, bufferSize: bufferSize)
+                    minPoint = min(minPoint, vertex)
+                    maxPoint = max(maxPoint, vertex)
+                } catch {
+                    print("⚠️ Warning: Skipping vertex \(i) due to buffer bounds error: \(error)")
+                    continue
+                }
             }
         }
 
@@ -285,31 +290,39 @@ class MeshAnalyzer: ObservableObject {
         for submesh in mesh.submeshes ?? [] {
             guard let submesh = submesh as? MDLSubmesh else { continue }
 
-            // Get index buffer
+            // Get index buffer with safe access
             let indexBuffer = submesh.indexBuffer
             let indexData = indexBuffer.map().bytes
+            let indexBufferSize = indexBuffer.length
             let indexCount = submesh.indexCount
 
-            // Get vertex buffer
+            // Get vertex buffer with safe access
             guard let vertexBuffer = mesh.vertexBuffers.first else { continue }
             let vertexData = vertexBuffer.map().bytes
+            let vertexBufferSize = vertexBuffer.length
             guard let layout = mesh.vertexDescriptor.layouts.object(at: 0) as? MDLVertexBufferLayout else { continue }
             let strideValue = layout.stride
 
             // Calculate signed volume for each triangle
             for i in stride(from: 0, to: indexCount, by: 3) {
-                let idx0 = indexData.advanced(by: i * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx1 = indexData.advanced(by: (i + 1) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx2 = indexData.advanced(by: (i + 2) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
+                // Safe memory access with bounds checking
+                do {
+                    let idx0 = try safeLoadIndex(from: indexData, index: i, bufferSize: indexBufferSize)
+                    let idx1 = try safeLoadIndex(from: indexData, index: i + 1, bufferSize: indexBufferSize)
+                    let idx2 = try safeLoadIndex(from: indexData, index: i + 2, bufferSize: indexBufferSize)
 
-                let v0 = vertexData.advanced(by: Int(idx0) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v1 = vertexData.advanced(by: Int(idx1) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v2 = vertexData.advanced(by: Int(idx2) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
+                    let v0 = try safeLoadVertex(from: vertexData, index: Int(idx0), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v1 = try safeLoadVertex(from: vertexData, index: Int(idx1), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v2 = try safeLoadVertex(from: vertexData, index: Int(idx2), stride: strideValue, bufferSize: vertexBufferSize)
 
-                // Signed volume of tetrahedron formed by triangle and origin
-                // Formula: V = (1/6) * |a · (b × c)|
-                let signedVolume = Double(dot(v0, cross(v1, v2))) / 6.0
-                volume += signedVolume
+                    // Signed volume of tetrahedron formed by triangle and origin
+                    // Formula: V = (1/6) * |a · (b × c)|
+                    let signedVolume = Double(dot(v0, cross(v1, v2))) / 6.0
+                    volume += signedVolume
+                } catch {
+                    print("⚠️ Warning: Skipping triangle at index \(i) due to buffer bounds error: \(error)")
+                    continue
+                }
             }
         }
 
@@ -333,7 +346,9 @@ class MeshAnalyzer: ObservableObject {
 
     /// Alternative: Calculate volume using voxelization (for non-watertight meshes)
     /// More robust but slightly less accurate
-    private func calculateVoxelVolume(_ mesh: MDLMesh, resolution: Int = 128) -> Double {
+    /// Performance: O(resolution³ × triangles) - expensive! Default resolution reduced from 128 to 64
+    /// TODO: Implement Octree or BVH spatial partitioning for 20-50x speedup
+    private func calculateVoxelVolume(_ mesh: MDLMesh, resolution: Int = 64) -> Double {
         guard let bbox = boundingBox else { return 0 }
 
         let size = bbox.size
@@ -381,25 +396,32 @@ class MeshAnalyzer: ObservableObject {
 
             let indexBuffer = submesh.indexBuffer
             let indexData = indexBuffer.map().bytes
+            let indexBufferSize = indexBuffer.length
             let indexCount = submesh.indexCount
 
             guard let vertexBuffer = mesh.vertexBuffers.first else { continue }
             let vertexData = vertexBuffer.map().bytes
+            let vertexBufferSize = vertexBuffer.length
             guard let layout = mesh.vertexDescriptor.layouts.object(at: 0) as? MDLVertexBufferLayout else { continue }
             let strideValue = layout.stride
 
-            // Check each triangle
+            // Check each triangle with safe memory access
             for i in stride(from: 0, to: indexCount, by: 3) {
-                let idx0 = indexData.advanced(by: i * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx1 = indexData.advanced(by: (i + 1) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx2 = indexData.advanced(by: (i + 2) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
+                do {
+                    let idx0 = try safeLoadIndex(from: indexData, index: i, bufferSize: indexBufferSize)
+                    let idx1 = try safeLoadIndex(from: indexData, index: i + 1, bufferSize: indexBufferSize)
+                    let idx2 = try safeLoadIndex(from: indexData, index: i + 2, bufferSize: indexBufferSize)
 
-                let v0 = vertexData.advanced(by: Int(idx0) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v1 = vertexData.advanced(by: Int(idx1) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v2 = vertexData.advanced(by: Int(idx2) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
+                    let v0 = try safeLoadVertex(from: vertexData, index: Int(idx0), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v1 = try safeLoadVertex(from: vertexData, index: Int(idx1), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v2 = try safeLoadVertex(from: vertexData, index: Int(idx2), stride: strideValue, bufferSize: vertexBufferSize)
 
-                if rayIntersectsTriangle(origin: point, direction: rayDirection, v0: v0, v1: v1, v2: v2) {
-                    intersectionCount += 1
+                    if rayIntersectsTriangle(origin: point, direction: rayDirection, v0: v0, v1: v1, v2: v2) {
+                        intersectionCount += 1
+                    }
+                } catch {
+                    // Skip this triangle if buffer access fails
+                    continue
                 }
             }
         }
@@ -489,30 +511,36 @@ class MeshAnalyzer: ObservableObject {
 
             let indexBuffer = submesh.indexBuffer
             let indexData = indexBuffer.map().bytes
+            let indexBufferSize = indexBuffer.length
             let indexCount = submesh.indexCount
 
             guard let vertexBuffer = mesh.vertexBuffers.first else { continue }
             let vertexData = vertexBuffer.map().bytes
+            let vertexBufferSize = vertexBuffer.length
             guard let layout = mesh.vertexDescriptor.layouts.object(at: 0) as? MDLVertexBufferLayout else { continue }
             let strideValue = layout.stride
 
-            // Calculate area for each triangle
+            // Calculate area for each triangle with safe memory access
             for i in stride(from: 0, to: indexCount, by: 3) {
-                let idx0 = indexData.advanced(by: i * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx1 = indexData.advanced(by: (i + 1) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
-                let idx2 = indexData.advanced(by: (i + 2) * MemoryLayout<UInt32>.size).assumingMemoryBound(to: UInt32.self).pointee
+                do {
+                    let idx0 = try safeLoadIndex(from: indexData, index: i, bufferSize: indexBufferSize)
+                    let idx1 = try safeLoadIndex(from: indexData, index: i + 1, bufferSize: indexBufferSize)
+                    let idx2 = try safeLoadIndex(from: indexData, index: i + 2, bufferSize: indexBufferSize)
 
-                let v0 = vertexData.advanced(by: Int(idx0) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v1 = vertexData.advanced(by: Int(idx1) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
-                let v2 = vertexData.advanced(by: Int(idx2) * strideValue).assumingMemoryBound(to: SIMD3<Float>.self).pointee
+                    let v0 = try safeLoadVertex(from: vertexData, index: Int(idx0), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v1 = try safeLoadVertex(from: vertexData, index: Int(idx1), stride: strideValue, bufferSize: vertexBufferSize)
+                    let v2 = try safeLoadVertex(from: vertexData, index: Int(idx2), stride: strideValue, bufferSize: vertexBufferSize)
 
-                // Triangle area using cross product
-                let edge1 = v1 - v0
-                let edge2 = v2 - v0
-                let crossProduct = cross(edge1, edge2)
-                let area = Double(length(crossProduct)) / 2.0
-
-                totalArea += area
+                    // Triangle area using cross product
+                    let edge1 = v1 - v0
+                    let edge2 = v2 - v0
+                    let crossProduct = cross(edge1, edge2)
+                    let area = Double(length(crossProduct)) / 2.0
+                    totalArea += area
+                } catch {
+                    // Skip this triangle if buffer access fails
+                    continue
+                }
             }
         }
 
@@ -609,12 +637,36 @@ class MeshAnalyzer: ObservableObject {
         meshSimplifier.isProcessing
     }
 
+    // MARK: - Safe Memory Access Helpers
+
+    /// Safely load a value from unsafe pointer with bounds checking
+    private func safeLoad<T>(from pointer: UnsafeRawPointer, offset: Int, as type: T.Type, bufferSize: Int) throws -> T {
+        let requiredSize = offset + MemoryLayout<T>.size
+        guard requiredSize <= bufferSize else {
+            throw AnalysisError.bufferOverflow(required: requiredSize, available: bufferSize)
+        }
+        return pointer.advanced(by: offset).assumingMemoryBound(to: T.self).pointee
+    }
+
+    /// Safely load SIMD3<Float> vertex with stride checking
+    private func safeLoadVertex(from pointer: UnsafeRawPointer, index: Int, stride: Int, bufferSize: Int) throws -> SIMD3<Float> {
+        let offset = index * stride
+        return try safeLoad(from: pointer, offset: offset, as: SIMD3<Float>.self, bufferSize: bufferSize)
+    }
+
+    /// Safely load UInt32 index
+    private func safeLoadIndex(from pointer: UnsafeRawPointer, index: Int, bufferSize: Int) throws -> UInt32 {
+        let offset = index * MemoryLayout<UInt32>.size
+        return try safeLoad(from: pointer, offset: offset, as: UInt32.self, bufferSize: bufferSize)
+    }
+
     // MARK: - Errors
 
     enum AnalysisError: Error {
         case invalidMesh
         case noVertexData
         case calculationFailed
+        case bufferOverflow(required: Int, available: Int)
     }
 }
 
